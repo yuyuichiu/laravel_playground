@@ -3,6 +3,7 @@
 // Don't need to worry about how it's inside work
 // Extension PHP Name Resolver can help you locate these imports by right clicking the type you need
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,22 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/listings', function() {
+    return view('listing', [
+        'header' => 'Latest Listings',
+        'listings' => [
+            [
+                'title' => 'Web developer',
+                'description' => 'Require 15 years of experience, must be under 30 years old'
+            ],
+            [
+                'title' => 'Pilot',
+                'description' => 'Pays with exposure.'
+            ],
+        ]
+    ]);
+});
 
 Route::get('/users/{name?}', function($name = "Guest") {
     return response("<h1>Welcome, $name</h1>")
@@ -31,8 +48,16 @@ Route::get('search', function(Request $req) {
     return response("Name:$req->name || City: $req->age", 200);
 });
 
+Route::get('restaurants', function() {
+    $restaurants = DB::select("SELECT * FROM restaurants join addresses on addresses.id = restaurants.address_id");
+    
+    return response(view('restaurants', [
+        'header' => 'restaurants',
+        'restaurants' => $restaurants
+    ]), 200);
+});
+
 // Unlike Express, this does not necessarily need to placed in the bottom
 Route::get('/', function () {
-    return response(view('welcome'), 200)
-        ->header('X-Test', 'Hello World');
+    return response(view('welcome'), 200);
 });

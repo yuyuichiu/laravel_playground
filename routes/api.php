@@ -14,6 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// A simple API route that returns a JSON response
+Route::get('/posts', function() {
+    return response()->json([
+        'posts' => [
+            [
+                'title'=> 'First post!',
+                'content' => 'Woah'
+            ],
+            [
+                'title'=> 'Second post!',
+                'content' => 'That\'s cool'
+            ]
+        ]
+    ]);
+});
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
